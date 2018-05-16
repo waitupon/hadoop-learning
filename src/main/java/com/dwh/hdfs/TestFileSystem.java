@@ -16,6 +16,8 @@ import java.lang.reflect.Method;
  */
 public class TestFileSystem {
 
+    String hdfsPath = "hdfs://master:9000";
+
     Configuration conf = null;
 
     FileSystem fs = null;
@@ -24,7 +26,7 @@ public class TestFileSystem {
     public void initConf(){
         Configuration conf = new Configuration();
         try {
-            FileSystem fs = FileSystem.get(conf);
+             fs = FileSystem.get(conf);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -32,7 +34,7 @@ public class TestFileSystem {
 
     @Test
     public void testWrite() throws Exception {
-        FSDataOutputStream dos = fs.create(new Path("hdfs://master:9000/usr/hello.txt"));
+        FSDataOutputStream dos = fs.create(new Path(hdfsPath + "/usr/hello.txt"));
         dos.write("hello".getBytes());
         dos.close();
         System.out.println("over");
@@ -42,7 +44,7 @@ public class TestFileSystem {
 
     @Test
     public void testRead() throws Exception {
-        FSDataInputStream dis = fs.open(new Path("hdfs://master:9000/usr/hello.txt"));
+        FSDataInputStream dis = fs.open(new Path(hdfsPath + "/usr/hello.txt"));
         FileOutputStream fos = new FileOutputStream("d:/hello.txt");
         IOUtils.copyBytes(dis,fos,1024);
         IOUtils.closeStream(dis);
@@ -52,7 +54,7 @@ public class TestFileSystem {
 
     @Test
     public void testSeek() throws Exception {
-        FSDataInputStream dis = fs.open(new Path("hdfs://master:9000/usr/hello.txt"));
+        FSDataInputStream dis = fs.open(new Path(hdfsPath + "/usr/hello.txt"));
         FileOutputStream fos = new FileOutputStream("d:/hello.txt");
         dis.seek(2);
         IOUtils.copyBytes(dis,fos,1024);
