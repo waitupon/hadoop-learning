@@ -16,9 +16,7 @@ import java.lang.reflect.Method;
  */
 public class TestFileSystem {
 
-    String hdfsPath = "hdfs://master:9000";
-
-    Configuration conf = null;
+    String hdfsPath = "hdfs://localhost:9000";
 
     FileSystem fs = null;
 
@@ -83,6 +81,19 @@ public class TestFileSystem {
                     System.out.println(m.getName() + "()=" + ret);
                 }
             }
+        }
+    }
+
+
+    @Test
+    public void getLocation() throws Exception {
+        Path path = new Path(hdfsPath + "/usr/hello.txt");
+        FileStatus fileStatus = fs.getFileStatus(path);
+        long length = fileStatus.getLen();
+        BlockLocation[] locs = fs.getFileBlockLocations(fileStatus, 0, length);
+
+        for(BlockLocation loc:locs){
+            System.out.println(loc.getHosts());
         }
     }
 
