@@ -3,13 +3,11 @@ package com.dwh.hdfs;
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.compress.CompressionCodec;
-import org.apache.hadoop.io.compress.CompressionCodecFactory;
-import org.apache.hadoop.io.compress.CompressionInputStream;
-import org.apache.hadoop.io.compress.CompressionOutputStream;
+import org.apache.hadoop.io.compress.*;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -54,4 +52,24 @@ public class TestCodec {
         System.out.println("over!!");
 
     }
+
+
+
+    @Test
+    public void testCodecPool() throws Exception {
+        Configuration conf = new Configuration();
+        Class codecClass = DeflateCodec.class;
+
+        CompressionCodec codec = (CompressionCodec) ReflectionUtils.newInstance(codecClass, conf);
+        Decompressor decompressor = CodecPool.getDecompressor(codec);
+
+        CompressionInputStream cis = codec.createInputStream(new FileInputStream("/Users/wenhao/tmp/log.deflate"), decompressor);
+        IOUtils.copy(cis,new FileOutputStream("/Users/wenhao/tmp/2.log"),1024);
+
+        cis.close();
+        //讲解压缩返还到池子中
+        CodecPool.returnDecompressor(decompressor);
+        System.out.println("over");
+    }
+
 }
