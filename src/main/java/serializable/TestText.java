@@ -77,6 +77,7 @@ public class TestText {
         FileOutputStream fos = new FileOutputStream("/Users/wenhao/tmp/data.dat");
         DataOutputStream dos = new DataOutputStream(fos);
 
+
         Province province = new Province("河南",123);
         province.write(dos);
 
