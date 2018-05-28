@@ -7,9 +7,19 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 public class MaxTemperatureMapper extends Mapper<LongWritable,Text,Text,IntWritable> {
     private static final int MISSING = 9999;
+
+    InetAddress addr = null;
+
+    @Override
+    protected void setup(Context context) throws IOException, InterruptedException {
+        addr = InetAddress.getLocalHost();
+        context.getCounter("m","maxMapper.setup." + addr).increment(1);
+
+    }
 
     @Override
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
@@ -25,5 +35,10 @@ public class MaxTemperatureMapper extends Mapper<LongWritable,Text,Text,IntWrita
         if(airTemp!=MISSING && quality.matches("[01459]")){
             context.write(new Text(year),new IntWritable(airTemp));
         }
+    }
+
+    @Override
+    protected void cleanup(Context context) throws IOException, InterruptedException {
+        context.getCounter("m","maxMapper.cleanup." + addr).increment(1);
     }
 }

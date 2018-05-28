@@ -14,11 +14,12 @@ import java.lang.reflect.Method;
 /**
  * Created by Administrator on 2018/5/16 0016.
  */
+
 public class TestFileSystem {
 
     String hdfsPath = "hdfs://localhost:9000";
 
-    FileSystem fs = null;
+    FileSystem fs;
 
     @Before
     public void initConf(){
