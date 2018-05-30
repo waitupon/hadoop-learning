@@ -12,13 +12,13 @@ import java.util.Map;
 public class WordCountReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
     InetAddress addr = null;
 
-    Map<String,Integer> data =  null;
+//    Map<String,Integer> data =  null;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         addr = InetAddress.getLocalHost();
         context.getCounter("r","WordCountReducer.setup." + addr).increment(1);
-        data = new HashMap<String, Integer>();
+//        data = new HashMap<String, Integer>();
     }
 
     @Override
@@ -26,16 +26,13 @@ public class WordCountReducer extends Reducer<Text,IntWritable,Text,IntWritable>
         int maxValue = Integer.MIN_VALUE;
 
 
-        Integer v = 0;
-        int v2 = 0;
-        if(data.containsKey(key.toString())){
-             v = data.get(key.toString());
-        }
+        Integer count = 0;
+
         for(IntWritable writable : values){
-            v2 += writable.get();
+            count ++;
         }
-        v = v2+v;
-        context.write(key,new IntWritable(v));
+
+        context.write(key,new IntWritable(count));
     }
 
 
