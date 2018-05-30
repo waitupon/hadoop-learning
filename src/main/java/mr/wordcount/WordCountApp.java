@@ -24,10 +24,17 @@ public class WordCountApp {
         job.setJobName("wordCount");
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        //FileInputFormat.setMaxInputSplitSize(job,100);
         job.setMapperClass(WordCountMapper.class);
         job.setReducerClass(WordCountReducer.class);
+
+        //job.setCombinerClass(WordCountReducer.class); // 设置联合reducer
+
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
+
+        //job.setPartitionerClass(MyPartition.class); //设置分区
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }
