@@ -2,20 +2,20 @@ package inputformat.db;
 
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.db.DBConfiguration;
-import org.apache.hadoop.mapreduce.lib.db.DBInputFormat;
+import org.apache.hadoop.mapreduce.lib.db.DBOutputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 
-public class DbImprotApp {
+public class DBoutputApp {
 
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 2) {
+        if (args.length != 1) {
             System.err
                     .println("Usage:  <input path> <output path>");
             System.exit(-1);
@@ -25,20 +25,26 @@ public class DbImprotApp {
 
         Job job = Job.getInstance();
         Configuration conf = job.getConfiguration();
-        job.setJarByClass(DbImprotApp.class);
+
+//        FileSystem fs = FileSystem.get(conf);
+//        fs.delete(new Path(args[1]),true);
+
+        job.setJarByClass(DBoutputApp.class);
         job.setJobName("db import");
-        /*FileInputFormat.addInputPath(job, new Path(args[0]));*/
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+
+        job.setOutputFormatClass(DBOutputFormat.class);
 
         DBConfiguration.configureDB(conf,"com.mysql.jdbc.Driver","jdbc:mysql://192.168.6.14:3306/dwh","xiang","nEw-TESt@&2#");
-        DBInputFormat.setInput(job,UserWritable.class,"select id,name from base_user","select count(*) from base_user");
 
-        job.setInputFormatClass(DBInputFormat.class);
+        DBOutputFormat.setOutput(job,"words","word","num");
+        job.setMapperClass(WordCountMapper.class);
+        job.setReducerClass(WordCountReducer.class);
 
-        job.setMapperClass(DbImportMapper.class);
+        job.setOutputKeyClass(WordWritable.class);
+        job.setOutputValueClass(NullWritable.class);
 
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(Text.class);
+        job.setNumReduceTasks(1);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
