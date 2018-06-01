@@ -9,8 +9,6 @@ import java.io.IOException;
 
 
 public class WordCountReducer extends Reducer<Text,IntWritable,WordWritable,NullWritable> {
-
-
     @Override
     protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
         int count = 0;

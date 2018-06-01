@@ -4,7 +4,9 @@ package inputformat.db;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.db.DBConfiguration;
 import org.apache.hadoop.mapreduce.lib.db.DBOutputFormat;
@@ -41,10 +43,13 @@ public class DBoutputApp {
         job.setMapperClass(WordCountMapper.class);
         job.setReducerClass(WordCountReducer.class);
 
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(IntWritable.class);
+
+        //reduce 输出
         job.setOutputKeyClass(WordWritable.class);
         job.setOutputValueClass(NullWritable.class);
 
-        job.setNumReduceTasks(1);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
