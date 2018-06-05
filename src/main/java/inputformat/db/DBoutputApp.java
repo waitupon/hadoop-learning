@@ -12,7 +12,9 @@ import org.apache.hadoop.mapreduce.lib.db.DBConfiguration;
 import org.apache.hadoop.mapreduce.lib.db.DBOutputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 
-
+/**
+ * 将统计的字符个数输入到数据库中
+ */
 public class DBoutputApp {
 
 
