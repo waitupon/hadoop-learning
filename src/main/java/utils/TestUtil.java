@@ -1,27 +1,33 @@
 package utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TestUtil {
-    public static void main(String[] args) {
-        int num = 3;
-        int step = 10 / num;
-        int[][] arr = new int[num][2];
+    public static void main(String[] args) throws InterruptedException {
+        List<String> list = new ArrayList<String>();
 
-        for(int i=0; i<num; i++){
-            if(i==0){
-                arr[i] = new int[]{Integer.MIN_VALUE, 1901 + (i+1) * step};
-            }else if(i == num -1){
-                arr[i] = new int[]{1901 + i * step , Integer.MAX_VALUE};
-            }else{
-                arr[i] = new int[]{1901 + i * step , 1901 + (i+1) * step};
-            }
+        for(int i=0;i<100;i++){
+            list.add("t"+i);
         }
-        int year = 1904;
 
-        for(int i=0; i<num; i++){
-            int[]ar = arr[i];
-            if(year >=ar[0] && year < ar[1]){
-                System.out.println(i);
-            }
+        while(list.size()>10){
+           final List<String> newList = list.subList(0,10);
+           new Thread(new Runnable() {
+               public void run() {
+                   System.out.println(Thread.currentThread().getName() + "  start");
+                   System.out.println("newList " + newList);
+                   try {
+                       Thread.sleep(1000);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+               }
+           }).start();
+//            Thread.sleep(1000);
+            newList.clear();
+            System.out.println("List " + list);
         }
+
     }
 }
