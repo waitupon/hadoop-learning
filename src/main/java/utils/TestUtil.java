@@ -2,6 +2,7 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class TestUtil {
     public static void main(String[] args) throws InterruptedException {
@@ -11,7 +12,12 @@ public class TestUtil {
             list.add("t"+i);
         }
 
-        while(list.size()>10){
+
+        CountDownLatch latch = new CountDownLatch(1);
+        latch.await();
+        System.out.println("done!");
+
+        /*while(list.size()>10){
            final List<String> newList = list.subList(0,10);
            new Thread(new Runnable() {
                public void run() {
@@ -27,7 +33,7 @@ public class TestUtil {
 //            Thread.sleep(1000);
             newList.clear();
             System.out.println("List " + list);
-        }
+        }*/
 
     }
 }
