@@ -21,9 +21,11 @@ public class LogUtil {
 
 
     public static void main(String[] args) {
-        LogUtil util = new LogUtil();
-        System.out.println(util.hashCode()&Integer.MAX_VALUE);
-        System.out.println(util.hashCode());
+//        LogUtil util = new LogUtil();
+//        System.out.println(util.hashCode()&Integer.MAX_VALUE);
+//        System.out.println(util.hashCode());
+        System.out.println(Constants.ids.idOne);
+        System.out.println(Constants.names.nameOne);
     }
 
 }
