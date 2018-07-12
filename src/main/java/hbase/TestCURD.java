@@ -116,6 +116,21 @@ public class TestCURD {
     }
 
 
+    @Test
+    public void del(){
+        try {
+            Table table = conn.getTable(TableName.valueOf("t1"));
+            Delete delete = new Delete(Bytes.toBytes("row20"));
+            delete.addColumn(Bytes.toBytes("cf1"),Bytes.toBytes("name"));
+            table.delete(delete);
+
+            table.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 
