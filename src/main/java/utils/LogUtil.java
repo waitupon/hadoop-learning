@@ -24,8 +24,10 @@ public class LogUtil {
 //        LogUtil util = new LogUtil();
 //        System.out.println(util.hashCode()&Integer.MAX_VALUE);
 //        System.out.println(util.hashCode());
-        System.out.println(Constants.ids.idOne);
-        System.out.println(Constants.names.nameOne);
+//        long i = 1 << 32L;
+        int j = 1 & (1 << 2);
+        int k = 6&4;
+        System.out.println(k );
     }
 
 }
