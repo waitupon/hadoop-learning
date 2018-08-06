@@ -4,7 +4,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
+
 import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.Test;
 
@@ -17,7 +19,7 @@ import java.util.Properties;
 public class App {
     public static void main(String[] args) {
         Properties props = new Properties();
-        props.put("bootstrap.servers", "master:9092");
+        props.put("bootstrap.servers", "192.168.3.172:9092");
         props.put("acks", "all");
         props.put("retries", 0);
         props.put("batch.size", 16384);
@@ -31,18 +33,22 @@ public class App {
         for (int i = 1; i <= 10; i++) {
             String value = "val_" + i;
             ProducerRecord<String, String> msg = new ProducerRecord<String, String>(topic, value);
-            System.out.println(value);
+
             procuder.send(msg);
+            System.out.println(value);
         }
+        procuder.close();
 
         System.out.println("over");
+
+
     }
 
 
     @Test
     public void mostOnce(){
         Properties props = new Properties();
-        props.put("bootstrap.servers", "master:9092");
+        props.put("bootstrap.servers", "192.168.3.172:9092");
 //        props.put("group.id", "test-1");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");
