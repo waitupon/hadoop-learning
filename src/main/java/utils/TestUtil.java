@@ -3,43 +3,56 @@ package utils;
 import org.junit.Test;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 public class TestUtil {
+    public static List<String> list = new ArrayList<String>();
+
+    public static HashMap<String,Integer> map = new HashMap<String,Integer>();
     public static void main(String[] args) throws InterruptedException {
-        List<String> list = new ArrayList<String>();
-
-        for(int i=0;i<100;i++){
-            list.add("t"+i);
+        TestUtil.showFileName("E:\\迅雷下载\\G-queen");
+        for(String key : map.keySet()){
+            System.out.println(key +  "     " + map.get(key));
         }
+        System.out.println("一共完成" +list.size()  +"个文件");
+    }
 
 
-        CountDownLatch latch = new CountDownLatch(1);
-        latch.await();
-        System.out.println("done!");
 
-        /*while(list.size()>10){
-           final List<String> newList = list.subList(0,10);
-           new Thread(new Runnable() {
-               public void run() {
-                   System.out.println(Thread.currentThread().getName() + "  start");
-                   System.out.println("newList " + newList);
-                   try {
-                       Thread.sleep(1000);
-                   } catch (InterruptedException e) {
-                       e.printStackTrace();
-                   }
-               }
-           }).start();
-//            Thread.sleep(1000);
-            newList.clear();
-            System.out.println("List " + list);
-        }*/
+    public  static void showFileName(String path){
+        File parentFile = new File(path);
+        File[] files = parentFile.listFiles();
+
+        if(files!=null && files.length >0){
+            for(File childFile :files){
+                if(childFile.isDirectory()){
+                    showFileName(childFile.getAbsolutePath());
+                }else{
+                    if(!childFile.getName().contains("bt.xltd") && !childFile.getName().contains(".torrent")){
+                      //  System.out.println(childFile.getAbsolutePath());
+                        int i = childFile.getAbsolutePath().lastIndexOf("\\");
+                        String dirPath = childFile.getAbsolutePath().substring(0,i);
+                        if(map.containsKey(dirPath)){
+                            Integer num = map.get(dirPath);
+                            map.put(dirPath,++num);
+                        }else{
+                            map.put(dirPath,1);
+                        }
+                        list.add(childFile.getAbsolutePath());
+                    }
+                }
+            }
+        }
 
     }
 
+//    private void getName(String path) {
+//        File file = new File(path);
+//        if(file.isDirectory()){
+//            String[] list = file.list();
+//        }
+//    }
 
 
     @Test
